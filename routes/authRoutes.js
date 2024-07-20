@@ -26,9 +26,10 @@ router.post("/index", async (req, res) => {
             return res.status(400).json({ error: "Ogiltig inmatning, skicka användarnamn och lösenord" });
         }
 
-        // Kod för att lagra i databas
-
         // Korrekt - spara användare
+        const User = new user({ username, password });
+        await User.save();
+
         res.status(201).json({ message: "Användare skapad" });
     } catch (error) {
         res.status(500).json({ error: "Server error" });
