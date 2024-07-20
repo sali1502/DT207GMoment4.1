@@ -36,7 +36,7 @@ router.post("/index", async (req, res) => {
     }
 });
 
-// Logga in
+// Logga in användare
 router.post("/login", async (req, res) => {
     try {
         const { username, password } = req.body;
@@ -45,16 +45,22 @@ router.post("/login", async (req, res) => {
         if (!username || !password) {
             return res.status(400).json({ error: "Ogiltig inmatning, skicka användarnamn och lösenord" });
         }
-        // Kolla inmatningsvärden
-        if (username === "Åsa" && password === "password") {
-            res.status(200).json({ message: "Login lyckades" });
-        } else {
-            res.status(401).json({ error: "Ogiltigt användarnamn/lösenord" });
+
+        // Kolla "credentials"
+     
+        // Finns användaren?
+        const User = await user.findOne({ username });
+        if (!User) {
+            return res.status(401).json({ error: "felaktigt användarname/lösenord" });
         }
 
-        // Kod för att lagra i databas
-
-        // Korrekt - spara användare
+        // Kolla lösenord
+        const isPasswordMatch = await User.comparePassword(password);
+        if (!isPasswordMatch) {
+            return res.status(401).json({ error: "Incorrect username/password" });
+        } else {
+            res.status(200).json({ message: "Användare inloggad!" });
+        }
     } catch (error) {
         res.status(500).json({ error: "Server error" });
     }
