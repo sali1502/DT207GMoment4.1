@@ -51,13 +51,13 @@ router.post("/login", async (req, res) => {
         // Finns användaren?
         const User = await user.findOne({ username });
         if (!User) {
-            return res.status(401).json({ error: "felaktigt användarname/lösenord" });
+            return res.status(401).json({ error: "Ogiltigt användarnamn/lösenord" });
         }
 
         // Kolla lösenord
         const isPasswordMatch = await User.comparePassword(password);
         if (!isPasswordMatch) {
-            return res.status(401).json({ error: "Incorrect username/password" });
+            return res.status(401).json({ error: "Ogiltigt användarnamn/lösenord" });
         } else {
             res.status(200).json({ message: "Användare inloggad!" });
         }

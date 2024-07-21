@@ -66,7 +66,7 @@ userSchema.static.login = async function (username, password) {
         throw new Error("Ogiltigt användarnamn/lösenord!");
     }
 
-    // Correct
+    // Korrect
     return user;
 
     } catch(error) {
