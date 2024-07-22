@@ -3,6 +3,7 @@
 const express = require("express");
 const router = express.Router();
 const mongoose = require("mongoose");
+const jwt = require("jsonwebtoken");
 require("dotenv").config();
 
 // Connect to MongoDB
@@ -47,7 +48,7 @@ router.post("/login", async (req, res) => {
         }
 
         // Kolla "credentials"
-     
+
         // Finns användaren?
         const User = await user.findOne({ username });
         if (!User) {
@@ -59,14 +60,23 @@ router.post("/login", async (req, res) => {
         if (!isPasswordMatch) {
             return res.status(401).json({ error: "Ogiltigt användarnamn/lösenord" });
         } else {
-            res.status(200).json({ message: "Användare inloggad!" });
+
+            // Skapa JWT
+            const payload = { username: username };
+            const token = jwt.sign(payload, process.env.JWT_SECRET_KEY, { expiresIn: '1h' });
+            const response = {
+                message: "Användare är inloggad!",
+                token: token
+            }
+            res.status(500).json({ response });
         }
+
     } catch (error) {
         res.status(500).json({ error: "Server error" });
     }
 });
 
-module.exports = router;
+module.exports = router; 
 
 
 
