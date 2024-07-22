@@ -24,7 +24,7 @@ router.post("/index", async (req, res) => {
 
         // Validera input
         if (!username || !password) {
-            return res.status(400).json({ error: "Ogiltig inmatning, skicka användarnamn och lösenord" });
+            return res.status(400).json({ error: "Ogiltig inmatning, skicka användarnamn/lösenord" });
         }
 
         // Korrekt - spara användare
@@ -33,7 +33,7 @@ router.post("/index", async (req, res) => {
 
         res.status(201).json({ message: "Användare skapad" });
     } catch (error) {
-        res.status(500).json({ error: "Server error" });
+        res.status(500).json({ error: "Användarnamnet är upptaget, försök igen!" });
     }
 });
 
@@ -72,7 +72,7 @@ router.post("/login", async (req, res) => {
         }
 
     } catch (error) {
-        res.status(500).json({ error: "Server error" });
+        res.status(500).json({ error: "Ett serverfel uppstod, försök igen!" });
     }
 });
 

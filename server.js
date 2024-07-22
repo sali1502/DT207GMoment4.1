@@ -32,7 +32,7 @@ function authenticateToken(req, res, next) {
     if (token == null) res.status(401).json({ message: "Token saknas" });
 
     jwt.verify(token, process.env.JWT_SECRET_KEY, (err, username) => {
-        if (err) return res.status(403).json({ message: "Ej korrekt JWT" });
+        if (err) return res.status(403).json({ message: "Ej korrekt JWT!" });
 
         req.username = username;
         next();
@@ -43,3 +43,6 @@ function authenticateToken(req, res, next) {
 app.listen(port, () => {
     console.log(`Servern är startad på http://localhost:${port}`);
 })
+
+
+

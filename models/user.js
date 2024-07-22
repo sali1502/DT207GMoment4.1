@@ -20,16 +20,16 @@ const userSchema = new mongoose.Schema({
 });
 
 // Hasha lösenord
-userSchema.pre("save", async function(next) {
-try {
-    if(this.isNew || this.isModified("password")) {
-        const hashedPassword = await bcrypt.hash(this.password, 10);
-        this.password = hashedPassword;
+userSchema.pre("save", async function (next) {
+    try {
+        if (this.isNew || this.isModified("password")) {
+            const hashedPassword = await bcrypt.hash(this.password, 10);
+            this.password = hashedPassword;
+        }
+        next();
+    } catch (error) {
+        next(error);
     }
-    next();
-} catch(error) {
-    next(error);
-}
 });
 
 // Registrera användare
@@ -38,13 +38,13 @@ userSchema.statics.register = async function (username, password) {
         const user = new this({ username, password });
         await user.save();
         return user;
-    } catch(error) {
+    } catch (error) {
         throw error;
     }
 };
 
 // Jämför hashade lösenord
-userSchema.methods.comparePassword = async function(password) {
+userSchema.methods.comparePassword = async function (password) {
     try {
         return await bcrypt.compare(password, this.password);
     } catch (error) {
@@ -56,20 +56,20 @@ userSchema.methods.comparePassword = async function(password) {
 userSchema.static.login = async function (username, password) {
     try {
         const user = await this.findOne({ username });
-        if(!user) {
+        if (!user) {
             throw new Error("Ogiltigt användarnamn/lösenord!");
         }
         const isPasswordMatch = await user.comparePassword(password);
 
-    // Ej korrekt?
-    if(!isPasswordMatch) {
-        throw new Error("Ogiltigt användarnamn/lösenord!");
-    }
+        // Ej korrekt?
+        if (!isPasswordMatch) {
+            throw new Error("Ogiltigt användarnamn/lösenord!");
+        }
 
-    // Korrect
-    return user;
+        // Korrekt
+        return user;
 
-    } catch(error) {
+    } catch (error) {
         throw error;
     }
 }
