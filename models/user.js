@@ -53,7 +53,7 @@ userSchema.methods.comparePassword = async function (password) {
 }
 
 // Logga in användare
-userSchema.static.login = async function (username, password) {
+userSchema.statics.login = async function (username, password) {
     try {
         const user = await this.findOne({ username });
         if (!user) {

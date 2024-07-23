@@ -24,7 +24,7 @@ router.post("/index", async (req, res) => {
 
         // Validera input
         if (!username || !password) {
-            return res.status(400).json({ error: "Ogiltig inmatning, skicka användarnamn/lösenord" });
+            return res.status(400).json({ error: "Ogiltig inmatning, skriv in användarnamn/lösenord" });
         }
 
         // Korrekt - spara användare
@@ -44,7 +44,7 @@ router.post("/login", async (req, res) => {
 
         // Validera input
         if (!username || !password) {
-            return res.status(400).json({ error: "Ogiltig inmatning, skicka användarnamn och lösenord" });
+            return res.status(400).json({ error: "Ogiltig inmatning, skriv in användarnamn och lösenord" });
         }
 
         // Kolla "credentials"
@@ -65,7 +65,7 @@ router.post("/login", async (req, res) => {
             const payload = { username: username };
             const token = jwt.sign(payload, process.env.JWT_SECRET_KEY, { expiresIn: '8h' });
             const response = {
-                message: "Användare är inloggad!",
+                message: "Användare är inloggad",
                 token: token
             }
             res.status(500).json({ response });

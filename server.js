@@ -7,6 +7,7 @@ const bodyParser = require("body-parser");
 const cors = require("cors");
 const authRoutes = require("./routes/authRoutes");
 const jwt = require("jsonwebtoken");
+
 require("dotenv").config();
 
 // Initiera Express
@@ -43,6 +44,5 @@ function authenticateToken(req, res, next) {
 app.listen(port, () => {
     console.log(`Servern är startad på http://localhost:${port}`);
 })
-
 
 
