@@ -13,16 +13,18 @@ require("dotenv").config();
 // Initiera Express
 const app = express();
 const port = process.env.PORT || 3000;
-
 app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cors());
+
+app.use(express.static("src"));
 
 // Routes
 app.use("/api", authRoutes);
 
 // Skyddad route
 app.get("/api/mypage", authenticateToken, (req, res) => {
-    res.json({ message: "Skyddad route!" });
+    res.json({ message: "Skyddad route" });
 });
 
 // Validera Token
@@ -33,7 +35,7 @@ function authenticateToken(req, res, next) {
     if (token == null) res.status(401).json({ message: "Token saknas" });
 
     jwt.verify(token, process.env.JWT_SECRET_KEY, (err, username) => {
-        if (err) return res.status(403).json({ message: "Ej korrekt JWT!" });
+        if (err) return res.status(403).json({ message: "Ej korrekt JWT" });
 
         req.username = username;
         next();

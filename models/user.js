@@ -57,13 +57,13 @@ userSchema.statics.login = async function (username, password) {
     try {
         const user = await this.findOne({ username });
         if (!user) {
-            throw new Error("Ogiltigt användarnamn/lösenord!");
+            throw new Error("Både användarnamn och lösenord behöver anges");
         }
         const isPasswordMatch = await user.comparePassword(password);
 
         // Ej korrekt?
         if (!isPasswordMatch) {
-            throw new Error("Ogiltigt användarnamn/lösenord!");
+            throw new Error("Både användarnamn och lösenord behöver anges");
         }
 
         // Korrekt

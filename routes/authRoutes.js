@@ -24,7 +24,7 @@ router.post("/index", async (req, res) => {
 
         // Validera input
         if (!username || !password) {
-            return res.status(400).json({ error: "Ogiltig inmatning, skriv in användarnamn/lösenord" });
+            return res.status(400).json({ error: "Ange användarnamn och lösenord" });
         }
 
         // Korrekt - spara användare
@@ -44,28 +44,26 @@ router.post("/login", async (req, res) => {
 
         // Validera input
         if (!username || !password) {
-            return res.status(400).json({ error: "Ogiltig inmatning, skriv in användarnamn och lösenord" });
+            return res.status(400).json({ error: "Ange användarnamn och lösenord" });
         }
-
-        // Kolla "credentials"
 
         // Finns användaren?
         const User = await user.findOne({ username });
         if (!User) {
-            return res.status(401).json({ error: "Ogiltigt användarnamn/lösenord" });
+            return res.status(401).json({ error: "Felaktigt användarnamn och/eller lösenord" });
         }
 
         // Kolla lösenord
         const isPasswordMatch = await User.comparePassword(password);
         if (!isPasswordMatch) {
-            return res.status(401).json({ error: "Ogiltigt användarnamn/lösenord" });
+            return res.status(401).json({ error: "Felaktigt användarnamn och/eller lösenord" });
         } else {
 
             // Skapa JWT
             const payload = { username: username };
             const token = jwt.sign(payload, process.env.JWT_SECRET_KEY, { expiresIn: '8h' });
             const response = {
-                message: "Användare är inloggad",
+                message: "Användare inloggad",
                 token: token
             }
             res.status(500).json({ response });
@@ -73,6 +71,17 @@ router.post("/login", async (req, res) => {
 
     } catch (error) {
         res.status(500).json({ error: "Ett serverfel uppstod, försök igen!" });
+    }
+});
+
+// Hämta alla användare
+router.get("/users", async (req, res) => {
+    try {
+        const users = await user.find();
+        res.status(200).json(users);
+    } catch (error) {
+        console.error("Server error" + error);
+        res.status(500).json({ error: "Server error" });
     }
 });
 
